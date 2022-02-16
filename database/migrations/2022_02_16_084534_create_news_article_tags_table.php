@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('news_article_tags', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->integer('article_id')->unsigned();
+            $table->integer('tag_id', 11)->unsigned();
         });
     }
 

@@ -15,7 +15,13 @@ return new class extends Migration
     {
         Schema::create('news_tags', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 100);
+            $table->string('description', 200)->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->integer('created_by')->unsigned();;
+            $table->integer('updated_by')->unsigned();;
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 

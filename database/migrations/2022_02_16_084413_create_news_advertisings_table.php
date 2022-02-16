@@ -15,7 +15,18 @@ return new class extends Migration
     {
         Schema::create('news_advertisings', function (Blueprint $table) {
             $table->id();
+            $table->integer('category_id')->unsigned();;
+            $table->string('name', 100);
+            $table->string('ads_image', 200);
+            $table->string('ads_link', 200)->nullable();
+            $table->enum('ads_position', ['top', 'left', 'right'])->default('top');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->integer('created_by')->unsigned();
+            $table->integer('updated_by')->unsigned();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 
