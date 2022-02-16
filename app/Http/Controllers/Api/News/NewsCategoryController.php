@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\News;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\NewsCategory;
+use Auth;
+use Validator;
 
 class NewsCategoryController extends Controller
 {
@@ -14,17 +17,9 @@ class NewsCategoryController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $categories = NewsCategory::paginate(10);
+        $success['categories'] = $categories;
+        return $this->sendResponse($success, 'Category retrive successfully.');
     }
 
     /**
@@ -35,18 +30,27 @@ class NewsCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required',
+            'description'   => 'required',
+            'slug'          => 'required'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $category = new NewsCategory;
+
+        $category->name          = $request->name;
+        $category->description   = $request->description;
+        $category->parent_id     = $request->parent_level;
+        $category->slug          = $request->category_slug;
+        $category->updated_by    = Auth::user()->id;
+        $category->save();
+
+        $success['category'] = $category;
+        return $this->sendResponse($success, 'Category successfully created.');
     }
 
     /**
@@ -57,7 +61,10 @@ class NewsCategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = NewsCategory::find($id);
+
+        $success['category'] = $category;
+        return $this->sendResponse($success, 'Category successfully created.');
     }
 
     /**
@@ -69,7 +76,27 @@ class NewsCategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'          => 'required',
+            'description'   => 'required',
+            'slug'          => 'required'
+        ]);
+
+        if($validator->fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $category = NewsCategory::find($id);
+
+        $category->name          = $request->name;
+        $category->description   = $request->description;
+        $category->parent_id     = $request->parent_level;
+        $category->slug          = $request->category_slug;
+        $category->created_by    = Auth::user()->id;
+        $category->save();
+
+        $success['category'] = $category;
+        return $this->sendResponse($success, 'Category successfully updated.');
     }
 
     /**
@@ -80,6 +107,8 @@ class NewsCategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $deleted = NewsCategory::delete($id);
+        $success['deleted'] = $deleted;
+        return $this->sendResponse($success, 'Category successfully deleted.');
     }
 }
