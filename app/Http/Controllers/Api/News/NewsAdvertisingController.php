@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Http\Controllers\Controller;
+use App\Models\NewsCategory;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Models\NewsAdvertising;
+use App\Models\NewsAdvertising;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class NewsAdvertisingController extends Controller
 {

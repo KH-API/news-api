@@ -17,15 +17,15 @@ use App\Http\Controllers\Api\News\NewsTagController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('login', function(){ return 111; });
+Route::post('logins', [AuthenticatedSessionController::class, 'login']);
 Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
-
+Route::get('articles', [NewsArticleController::class,'index']);
+Route::post('articles', [NewsArticleController::class,'store']);
 Route::middleware(['auth:sanctum'])->group(function(){
-    
-    Route::resource('advertising', NewsAdvertisingController::class)->except(['create', 'show']);
-    Route::resource('articles', NewsArticleController::class)->except(['create', 'show']);
-    Route::resource('categories', NewsCategoryController::class)->except(['create', 'show']);
-    Route::resource('tags', NewsTagController::class)->except(['create', 'show']);
+    Route::apiResource('advertising', NewsAdvertisingController::class)->except(['create', 'show']);
+    // Route::resource('articles', [NewsArticleController::class])->except(['create', 'show']);
+    Route::apiResource('categories', NewsCategoryController::class)->except(['create', 'show']);
+    Route::apiResource('tags', NewsTagController::class)->except(['create', 'show']);
 
 });
 
