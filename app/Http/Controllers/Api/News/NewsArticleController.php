@@ -46,7 +46,7 @@ class NewsArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+        return $this->newsArticleRepo->NewsArticleEdit($id);
     }
 
     /**
@@ -56,9 +56,10 @@ class NewsArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NewsArticleRequest $id)
     {
-        //
+        $this->newsArticleRepo->NewsArticleUpdate($id);
+        return response()->json(['status'=>true,'message'=>'The process successful.']);
     }
 
     /**

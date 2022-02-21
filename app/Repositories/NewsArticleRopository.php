@@ -68,9 +68,37 @@ class NewsArticleRopository
                 'seo_keyword'   => $request->seo_keyword,
                 'view_counter'  => $request->view_counter,
                 'is_active'     => $request->is_active,
-                'created_by'    => 1,
-                'updated_by'    => 1,
+                'created_by'    => Auth::user()->id,
+                'updated_by'    => Auth::user()->id,
             ]);
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
+        }
+    }
+
+    
+
+    public function NewsArticleEdit($id){
+      return NewsArticle::find($id);
+    }
+
+    public function NewsArticleUpdate($request){
+        if($request->hasFile('article_photo')) {
+            $image = $request->file('article_photo');
+            $filename = $image->getClientOriginalName();
+            $image->move(public_path('uploads/article'), $filename);
+        }else{
+            $filename = $request->oldImage;
+        }
+        try {
+            DB::beginTransaction();
+            $data = $request->all();
+            $data['article_slug']   =  preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->title);
+            $data['article_photo']  =  $filename;
+            $data['created_by']     =  1;
+            $data['updated_by']     =  1;
+            NewsArticle::where('id',$request->id)->update($data);
             DB::commit();
         } catch (\Exception $exp) {
             DB::rollBack();
