@@ -22,6 +22,7 @@ class NewsArticleResource extends JsonResource
             'article_slug'  => $this->article_slug,
             'article_photo' => $this->article_photo,
             'content'       => $this->content,
+            'tag'           => $this->tag,
             'seo_keyword'   => $this->seo_keyword,
             'view_counter'  => $this->view_counter,
             'is_active'     => $this->is_active,

@@ -24,6 +24,7 @@ class NewsArticleRopository
         'article_slug',
         'article_photo',
         'content',
+        'tag',
         'seo_keyword',
         'view_counter',
         'is_active',
@@ -65,6 +66,7 @@ class NewsArticleRopository
                 'article_slug'  => preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->title),
                 'article_photo' => $filename,
                 'content'       => $request->content,
+                'tag'           => $request->tag,
                 'seo_keyword'   => $request->seo_keyword,
                 'view_counter'  => $request->view_counter,
                 'is_active'     => $request->is_active,
@@ -76,8 +78,6 @@ class NewsArticleRopository
             DB::rollBack();
         }
     }
-
-    
 
     public function NewsArticleEdit($id){
       return NewsArticle::find($id);
@@ -96,8 +96,8 @@ class NewsArticleRopository
             $data = $request->all();
             $data['article_slug']   =  preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->title);
             $data['article_photo']  =  $filename;
-            $data['created_by']     =  1;
-            $data['updated_by']     =  1;
+            $data['created_by']     =  Auth::user()->id;
+            $data['updated_by']     =  Auth::user()->id;
             NewsArticle::where('id',$request->id)->update($data);
             DB::commit();
         } catch (\Exception $exp) {

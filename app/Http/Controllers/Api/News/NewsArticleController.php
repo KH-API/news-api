@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Models\NewsArticle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewsArticleRequest;
@@ -35,7 +36,7 @@ class NewsArticleController extends Controller
     public function store(NewsArticleRequest $request)
     {
         $this->newsArticleRepo->createNewsArticle($request);
-        return response()->json(['status'=>true,'message'=>'The process successful.']);
+        return response()->json(['status'=>true,'message'=>'Create Article successful.']);
     }
 
     /**
@@ -70,6 +71,7 @@ class NewsArticleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        NewsArticle::where('id',$id)->delete();
+        return response()->json(['status'=>true,'message'=>'The process successful.']);
     }
 }

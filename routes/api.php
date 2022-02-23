@@ -19,13 +19,9 @@ use App\Http\Controllers\Api\News\NewsTagController;
 */
 Route::post('logins', [AuthenticatedSessionController::class, 'login']);
 Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
-Route::get('articles', [NewsArticleController::class,'index']);
-Route::post('articles', [NewsArticleController::class,'store']);
-Route::get('articles/{id}', [NewsArticleController::class,'edit']);
-Route::put('articles/{id}', [NewsArticleController::class,'update']);
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('advertising', NewsAdvertisingController::class)->except(['create', 'show']);
-    // Route::resource('articles', [NewsArticleController::class])->except(['create', 'show']);
+    Route::apiResource('articles', [NewsArticleController::class])->except(['create', 'show']);
     Route::apiResource('categories', NewsCategoryController::class)->except(['create', 'show']);
     Route::apiResource('tags', NewsTagController::class)->except(['create', 'show']);
 });

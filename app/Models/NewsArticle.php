@@ -17,6 +17,7 @@ class NewsArticle extends Model
         'article_slug',
         'article_photo',
         'content',
+        'tag',
         'seo_keyword',
         'view_counter',
         'is_active',
