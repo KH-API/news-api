@@ -21,7 +21,7 @@ Route::post('logins', [AuthenticatedSessionController::class, 'login']);
 Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('advertising', NewsAdvertisingController::class)->except(['create', 'show']);
-    Route::apiResource('articles', [NewsArticleController::class])->except(['create', 'show']);
+    Route::apiResource('articles', NewsArticleController::class)->except(['create']);
     Route::apiResource('categories', NewsCategoryController::class)->except(['create', 'show']);
     Route::apiResource('tags', NewsTagController::class)->except(['create', 'show']);
 });

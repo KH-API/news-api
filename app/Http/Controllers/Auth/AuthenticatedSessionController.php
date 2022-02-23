@@ -28,6 +28,7 @@ class AuthenticatedSessionController extends Controller
         try{
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
+                /*if($request->device){return Auth::user()->createToken($request->device)->plainTextToken;}*/
                 return Auth::user();
             }else{
                 Auth::logout();

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\NewsArticleRequest;
 use App\Repositories\NewsArticleRopository;
+use App\Http\Requests\UpdateNewsArticleRequest;
 use App\Http\Resources\NewsArticles\NewsArticleResource;
 
 class NewsArticleController extends Controller
@@ -39,6 +40,10 @@ class NewsArticleController extends Controller
         return response()->json(['status'=>true,'message'=>'Create Article successful.']);
     }
 
+    public function show($id)
+    {
+        return $this->newsArticleRepo->NewsArticleEdit($id);
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -57,7 +62,7 @@ class NewsArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(NewsArticleRequest $id)
+    public function update(UpdateNewsArticleRequest $id)
     {
         $this->newsArticleRepo->NewsArticleUpdate($id);
         return response()->json(['status'=>true,'message'=>'The process successful.']);
