@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
-        return response()->noContent();
+        return response()->json(['status'=>true,'message'=>'Create Users successful.']);
+        // return response()->noContent();
     }
 }

@@ -9,7 +9,7 @@ class NewsArticle extends Model
 {
     use HasFactory;
     protected $table = 'news_articles';
-    protected $guarded = ['id'];
+    protected $guarded = ['id','created_at','updated_at','created_by','updated_by','deleted_at'];
     protected $fillable =[
         'category_id',
         'title',
@@ -20,11 +20,6 @@ class NewsArticle extends Model
         'tag',
         'seo_keyword',
         'view_counter',
-        'is_active',
-        'created_at',
-        'updated_at',
-        'created_by',
-        'updated_by',
-        'deleted_at'
+        'is_active'
     ];
 }

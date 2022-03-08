@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\News;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\NewsCategory;
-use Auth;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class NewsCategoryController extends Controller
 {
@@ -32,23 +32,16 @@ class NewsCategoryController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'          => 'required',
-            'description'   => 'required',
-            'slug'          => 'required'
         ]);
-
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $category = new NewsCategory;
-
-        $category->name          = $request->name;
-        $category->description   = $request->description;
-        $category->parent_id     = $request->parent_level;
-        $category->slug          = $request->category_slug;
-        $category->updated_by    = Auth::user()->id;
-        $category->save();
-
+        $category = $request->all();
+        $category['slug']           = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $category['name']);
+        $category['created_by']    = Auth::user()->id;
+        $category['updated_by']    = Auth::user()->id;
+        NewsCategory::create($category);
         $success['category'] = $category;
         return $this->sendResponse($success, 'Category successfully created.');
     }
@@ -107,7 +100,7 @@ class NewsCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = NewsCategory::delete($id);
+        $deleted = NewsCategory::where('id',$id)->delete($id);
         $success['deleted'] = $deleted;
         return $this->sendResponse($success, 'Category successfully deleted.');
     }
