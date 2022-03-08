@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use Illuminate\Http\Request;
 use App\Models\NewsAdvertising;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\NewsAdvertisingRequest;
 use App\Http\Requests\UpdateNewsAdvertisingRequest;
 
@@ -32,18 +31,24 @@ class NewsAdvertisingController extends Controller
      */
     public function store(NewsAdvertisingRequest $request)
     {
-        $data = $request->all();
-        if($request->hasFile('ads_image')) {
-            $image = $request->file('ads_image');
-            $filename = $image->getClientOriginalName();
-            $image->move(public_path('uploads/advertising'), $filename);
+        try{
+            $data = $request->all();
+            if($request->hasFile('ads_image')) {
+                $image = $request->file('ads_image');
+                $filename = $image->getClientOriginalName();
+                $image->move(public_path('uploads/advertising'), $filename);
+            }
+            $data['created_by']    = Auth::user()->id;
+            $data['updated_by']    = Auth::user()->id;
+            # Move Image
+            $data['ads_image'] = $filename;
+            NewsAdvertising::create($data);
+            $success['category'] = $data;
+            return $this->sendResponse($success, 'Category successfully created.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-        $data['created_by']    = Auth::user()->id;
-        $data['updated_by']    = Auth::user()->id;
-        # Move Image
-        $data['ads_image'] = $filename;
-        NewsAdvertising::create($data);
-        return response()->json(['success'=>true,'message'=>'Advertising successfully created.']);
     }
 
     /**
@@ -69,21 +74,28 @@ class NewsAdvertisingController extends Controller
      */
     public function update(UpdateNewsAdvertisingRequest $request, $id)
     {
-        $data = $request->all();
-        if($request->hasFile('ads_image')) {
-            $image = $request->file('ads_image');
-            $filename = $image->getClientOriginalName();
-            $image->move(public_path('uploads/advertising'), $filename);
-        }else{
-            $filename = $request->old_ads_image;
+        try {
+            $data = $request->all();
+            if($request->hasFile('ads_image')) {
+                $image = $request->file('ads_image');
+                $filename = $image->getClientOriginalName();
+                $image->move(public_path('uploads/advertising'), $filename);
+            }else{
+                $filename = $request->old_ads_image;
+            }
+            # Move Image
+            $data['ads_image']     = $filename;
+            $data['created_by']    = Auth::user()->id;
+            $data['updated_by']    = Auth::user()->id;
+            $data['is_active']     = 1;
+            NewsAdvertising::where('id',$id)->update($data);
+            $success['category'] = $data;
+            return $this->sendResponse($success, 'Category successfully updated.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-        # Move Image
-        $data['ads_image']     = $filename;
-        $data['created_by']    = Auth::user()->id;
-        $data['updated_by']    = Auth::user()->id;
-        $data['is_active']     = 1;
-        NewsAdvertising::where('id',$id)->update($data);
-        return response()->json(['success'=>true,'message'=>'Advertising successfully updated.']);
+        
     }
 
     /**

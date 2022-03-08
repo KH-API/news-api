@@ -25,7 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('advertising', NewsAdvertisingController::class)->except(['create']);
     Route::apiResource('articles', NewsArticleController::class)->except(['create']);
     Route::apiResource('categories', NewsCategoryController::class)->except(['create']);
-    Route::apiResource('tags', NewsTagController::class)->except(['create', 'show']);
+    Route::apiResource('tags', NewsTagController::class)->except(['create']);
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
