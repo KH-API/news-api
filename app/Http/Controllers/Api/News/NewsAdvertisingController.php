@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Models\NewsAdvertising;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Models\NewsAdvertising;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\NewsAdvertisingRequest;
+use App\Http\Requests\UpdateNewsAdvertisingRequest;
 
 class NewsAdvertisingController extends Controller
 {
@@ -26,30 +29,26 @@ class NewsAdvertisingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewsAdvertisingRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try{
+            $data = $request->all();
+            if($request->hasFile('ads_image')) {
+                $image = $request->file('ads_image');
+                $filename = $image->getClientOriginalName();
+                $image->move(public_path('uploads/advertising'), $filename);
+            }
+            $data['created_by']    = Auth::user()->id;
+            $data['updated_by']    = Auth::user()->id;
+            # Move Image
+            $data['ads_image'] = $filename;
+            NewsAdvertising::create($data);
+            $success['category'] = $data;
+            return $this->sendResponse($success, 'Category successfully created.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-
-        $advertising = new NewsAdvertising;
-
-        $advertising->advertising   = $request->parent_level;
-        $advertising->name          = $request->name;
-        $advertising->ads_image     = $request->ads_image;
-        $advertising->ads_link      = $request->ads_link;
-        $advertising->ads_position  = $request->ads_position;
-        $advertising->start_date    = $request->start_date;
-        $advertising->end_date      = $request->end_date;
-        $advertising->created_by    = Auth::user()->id;
-        $advertising->save();
-        # Move Image
-        $success['advertising'] = $advertising;
-        return $this->sendResponse($success, 'Advertising successfully created.');
     }
 
     /**
@@ -58,12 +57,13 @@ class NewsAdvertisingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show($id)
     {
-        $advertising = NewsCategory::find($id);
+        $advertising = NewsAdvertising::find($id);
         $success['advertising'] = $advertising;
         return $this->sendResponse($success, 'Advertising retrive successfully.');
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -72,33 +72,30 @@ class NewsAdvertisingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNewsAdvertisingRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try {
+            $data = $request->all();
+            if($request->hasFile('ads_image')) {
+                $image = $request->file('ads_image');
+                $filename = $image->getClientOriginalName();
+                $image->move(public_path('uploads/advertising'), $filename);
+            }else{
+                $filename = $request->old_ads_image;
+            }
+            # Move Image
+            $data['ads_image']     = $filename;
+            $data['created_by']    = Auth::user()->id;
+            $data['updated_by']    = Auth::user()->id;
+            $data['is_active']     = 1;
+            NewsAdvertising::where('id',$id)->update($data);
+            $success['category'] = $data;
+            return $this->sendResponse($success, 'Category successfully updated.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-
-        $advertising = NewsAdvertising::find($id);
-
-        $advertising->advertising   = $request->parent_level;
-        $advertising->name          = $request->name;
-        $advertising->ads_image     = $request->ads_image;
-        $advertising->ads_link      = $request->ads_link;
-        $advertising->ads_position  = $request->ads_position;
-        $advertising->start_date    = $request->start_date;
-        $advertising->end_date      = $request->end_date;
-        $advertising->updated_by    = Auth::user()->id;
-        $advertising->save();
-        # Delete Image
-
-        # Upload Image
-
-        $success['advertising'] = $advertising;
-        return $this->sendResponse($success, 'Advertising successfully updated.');
+        
     }
 
     /**
@@ -109,7 +106,7 @@ class NewsAdvertisingController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = NewsAdvertising::delete($id);
+        $deleted = NewsAdvertising::where('id',$id)->delete($id);
         # Delete Image
         $success['deleted'] = $deleted;
         return $this->sendResponse($success, 'Advertising successfully deleted.');

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\NewsTag;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Validator;
+use App\Http\Requests\NewsTagRequest;
 
 class NewsTagController extends Controller
 {
@@ -26,24 +30,20 @@ class NewsTagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewsTagRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try {
+            $tag = $request->all();
+            $tag['created_by']    = Auth::user()->id;
+            $tag['updated_by']    = Auth::user()->id;
+            $tag['is_active']     = 1;
+            NewsTag::create($tag);
+            $success['tag'] = $tag;
+            return $this->sendResponse($success, 'Tag successfully created.');
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollBack();
         }
-        
-        $tag = new NewsTag;
-        $tag->name          = $request->name;
-        $tag->description   = $request->description;
-        $tag->created_by    = Auth::user()->id;
-        $tag->save();
-
-        $success['tag'] = $tag;
-        return $this->sendResponse($success, 'Tag successfully updated.');
     }
 
     /**
@@ -52,7 +52,7 @@ class NewsTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show($id)
     {
         $tag = NewsTag::find($id);
         $success['tag'] = $tag;
@@ -66,25 +66,20 @@ class NewsTagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(NewsTagRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try {
+            $tag = $request->all();
+            $tag['created_by']    = Auth::user()->id;
+            $tag['updated_by']    = Auth::user()->id;
+            $tag['is_active']     = 1;
+            NewsTag::where('id',$id)->update($tag);
+            $success['tag'] = $tag;
+            return $this->sendResponse($success, 'Tag successfully updated.');
+            DB::commit();
+        } catch (\Throwable $exp) {
+            DB::rollBack();
         }
-        
-        $tag = NewsTag::find($id);
-
-        $tag->name          = $request->name;
-        $tag->description   = $request->description;
-        $tag->updated_by    = Auth::user()->id;
-        $tag->save();
-
-        $success['tag'] = $tag;
-        return $this->sendResponse($success, 'Tag successfully updated.');
     }
 
     /**
@@ -95,7 +90,7 @@ class NewsTagController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = NewsTag::delete($id);
+        $deleted = NewsTag::where('id',$id)->delete($id);
         $success['deleted'] = $deleted;
         return $this->sendResponse($success, 'Tag successfully deleted.');
     }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('article_slug', 100);
             $table->string('article_photo', 100);
             $table->text('content');
+            $table->json('tag')->nulable();
             $table->json('seo_keyword')->nullable();
             $table->integer('view_counter')->unsigned();
             $table->boolean('is_active')->deafult(true);

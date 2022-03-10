@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\News;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\NewsCategory;
-use Auth;
-use Validator;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\NewsCategoryRequest;
+use App\Http\Requests\UpdateNewsCategoryRequest;
 
 class NewsCategoryController extends Controller
 {
@@ -28,29 +29,19 @@ class NewsCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(NewsCategoryRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'description'   => 'required',
-            'slug'          => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try {
+            $category = $request->all();
+            $category['created_by']    = Auth::user()->id;
+            $category['updated_by']    = Auth::user()->id;
+            NewsCategory::create($category);
+            $success['category'] = $category;
+            return $this->sendResponse($success, 'Category successfully created.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-
-        $category = new NewsCategory;
-
-        $category->name          = $request->name;
-        $category->description   = $request->description;
-        $category->parent_id     = $request->parent_level;
-        $category->slug          = $request->category_slug;
-        $category->updated_by    = Auth::user()->id;
-        $category->save();
-
-        $success['category'] = $category;
-        return $this->sendResponse($success, 'Category successfully created.');
     }
 
     /**
@@ -59,10 +50,9 @@ class NewsCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function show($id)
     {
         $category = NewsCategory::find($id);
-
         $success['category'] = $category;
         return $this->sendResponse($success, 'Category successfully created.');
     }
@@ -74,29 +64,20 @@ class NewsCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNewsCategoryRequest $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name'          => 'required',
-            'description'   => 'required',
-            'slug'          => 'required'
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());
+        try {
+            $category = $request->all();
+            $category['created_by']    = Auth::user()->id;
+            $category['updated_by']    = Auth::user()->id;
+            NewsCategory::where('id',$id)->update($category);
+            $success['category'] = $category;
+            return $this->sendResponse($success, 'Category successfully updated.');
+            DB::commit();
+        } catch (\Exception $exp) {
+            DB::rollBack();
         }
-
-        $category = NewsCategory::find($id);
-
-        $category->name          = $request->name;
-        $category->description   = $request->description;
-        $category->parent_id     = $request->parent_level;
-        $category->slug          = $request->category_slug;
-        $category->created_by    = Auth::user()->id;
-        $category->save();
-
-        $success['category'] = $category;
-        return $this->sendResponse($success, 'Category successfully updated.');
+        
     }
 
     /**
@@ -107,7 +88,7 @@ class NewsCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = NewsCategory::delete($id);
+        $deleted = NewsCategory::where('id',$id)->delete($id);
         $success['deleted'] = $deleted;
         return $this->sendResponse($success, 'Category successfully deleted.');
     }
