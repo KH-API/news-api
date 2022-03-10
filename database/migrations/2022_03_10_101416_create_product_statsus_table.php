@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('news_categories', function (Blueprint $table) {
+        Schema::create('product_statsus', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('description', 200)->nullable();
-            $table->integer('parent_id')->unsigned();;
-            $table->string('slug', 100);
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->integer('created_by')->unsigned();
@@ -34,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_categories');
+        Schema::dropIfExists('product_statsus');
     }
 };
