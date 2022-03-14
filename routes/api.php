@@ -2,11 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\News\NewsTagController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\Api\News\NewsArticleController;
-use App\Http\Controllers\Api\News\NewsCategoryController;
-use App\Http\Controllers\Api\News\NewsAdvertisingController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +22,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('articles', NewsArticleController::class)->except(['create']);
     Route::apiResource('categories', NewsCategoryController::class)->except(['create']);
     Route::apiResource('tags', NewsTagController::class)->except(['create']);
+    Route::apiResource('product/category', ProductCategoryController::class)->except(['create']);
+    Route::apiResource('product/status', ProductStatusController::class)->except(['create']);
+    Route::apiResource('product/attribute', ProductAttributeController::class)->except(['create']);
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
