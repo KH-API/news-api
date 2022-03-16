@@ -45,7 +45,7 @@ class ProductCategoryController extends Controller
             $productCategory['created_by']    = Auth::user()->id;
             $productCategory['updated_by']    = Auth::user()->id;
             $productCategory['is_active']     = 1;
-            $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->slug);
+            $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::create($productCategory);
             $success['productCategory'] = $productCategory;
             return $this->sendResponse($success, 'Product Category successfully created.');
@@ -93,7 +93,7 @@ class ProductCategoryController extends Controller
             $productCategory['created_by']    = Auth::user()->id;
             $productCategory['updated_by']    = Auth::user()->id;
             $productCategory['is_active']     = 1;
-            $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->slug);
+            $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::where('id',$id)->update($productCategory);
             $success['productCategory'] = $productCategory;
             return $this->sendResponse($success, 'Product Category successfully updated.');
