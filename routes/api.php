@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('product/category', ProductCategoryController::class)->except(['create']);
     Route::apiResource('product/status', ProductStatusController::class)->except(['create']);
     Route::apiResource('product/attribute', ProductAttributeController::class)->except(['create']);
+    Route::apiResource('product', ProductController::class)->except(['create']);
 });
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
