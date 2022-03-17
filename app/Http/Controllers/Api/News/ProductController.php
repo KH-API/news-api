@@ -125,6 +125,6 @@ class ProductController extends Controller
     {
         $deleted = Product::where('id',$id)->delete($id);
         $success['deleted'] = $deleted;
-        return $this->sendResponse($success, 'Product Category successfully deleted.');
+        return $this->sendResponse($success, 'Product successfully deleted.');
     }
 }
