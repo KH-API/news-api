@@ -44,7 +44,6 @@ class ProductCategoryController extends Controller
             $productCategory = $request->all();
             $productCategory['created_by']    = Auth::user()->id;
             $productCategory['updated_by']    = Auth::user()->id;
-            $productCategory['is_active']     = 1;
             $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::create($productCategory);
             $success['productCategory'] = $productCategory;
@@ -92,7 +91,6 @@ class ProductCategoryController extends Controller
             $productCategory = $request->all();
             $productCategory['created_by']    = Auth::user()->id;
             $productCategory['updated_by']    = Auth::user()->id;
-            $productCategory['is_active']     = 1;
             $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::where('id',$id)->update($productCategory);
             $success['productCategory'] = $productCategory;

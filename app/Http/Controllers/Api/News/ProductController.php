@@ -47,7 +47,6 @@ class ProductController extends Controller
                 $image->move(public_path('uploads/products'), $filename);
             }
             $product = $request->all();
-            $product['status_id']       = 1;
             $product['product_photo']   = $filename;
             $product['created_by']      = Auth::user()->id;
             $product['updated_by']      = Auth::user()->id;
@@ -102,8 +101,7 @@ class ProductController extends Controller
                 $filename = $request->old_product_photo;
             }
             $product = $request->all();
-            $product['status_id']       = 1;
-            $product['product_photo']   = 1;
+            $product['product_photo']   = $filename;
             $product['created_by']      = Auth::user()->id;
             $product['updated_by']      = Auth::user()->id;
             Product::where('id',$id)->update($product);

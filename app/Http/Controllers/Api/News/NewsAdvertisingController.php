@@ -87,7 +87,6 @@ class NewsAdvertisingController extends Controller
             $data['ads_image']     = $filename;
             $data['created_by']    = Auth::user()->id;
             $data['updated_by']    = Auth::user()->id;
-            $data['is_active']     = 1;
             NewsAdvertising::where('id',$id)->update($data);
             $success['category'] = $data;
             return $this->sendResponse($success, 'Category successfully updated.');
