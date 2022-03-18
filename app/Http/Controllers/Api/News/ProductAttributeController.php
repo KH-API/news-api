@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Models\ProductAttribute;
+use App\Http\Requests\ProductAttributeRequest;
 
 class ProductAttributeController extends Controller
 {
@@ -33,7 +34,7 @@ class ProductAttributeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductAttributeRequest $request)
     {
         try {
             $productAttribute = $request->all();
@@ -79,7 +80,7 @@ class ProductAttributeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductAttributeRequest $request, $id)
     {
         try {
             $productAttribute = $request->all();

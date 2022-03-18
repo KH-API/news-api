@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Models\ProductCategory;
+use App\Http\Requests\ProductCategoryRequest;
 
 class ProductCategoryController extends Controller
 {
@@ -38,7 +39,7 @@ class ProductCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductCategoryRequest $request)
     {
         try {
             $productCategory = $request->all();
@@ -85,7 +86,7 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductCategoryRequest $request, $id)
     {
         try {
             $productCategory = $request->all();

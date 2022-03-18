@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Models\ProductStatus;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CreateProductStatusRequest;
 
 class ProductStatusController extends Controller
 {
@@ -38,7 +39,7 @@ class ProductStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateProductStatusRequest $request)
     {
         try {
             $productStatus = $request->all();
@@ -84,7 +85,7 @@ class ProductStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateProductStatusRequest $request, $id)
     {
         try {
             $productStatus = $request->all();
