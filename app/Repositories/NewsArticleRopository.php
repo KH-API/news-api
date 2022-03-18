@@ -69,7 +69,6 @@ class NewsArticleRopository
                 'tag'           => $request->tag,
                 'seo_keyword'   => $request->seo_keyword,
                 'view_counter'  => $request->view_counter,
-                'is_active'     => $request->is_active,
                 'created_by'    => Auth::user()->id,
                 'updated_by'    => Auth::user()->id,
             ]);
