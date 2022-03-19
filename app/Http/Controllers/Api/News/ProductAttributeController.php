@@ -39,7 +39,6 @@ class ProductAttributeController extends Controller
         try {
             $productAttribute = $request->all();
             $productAttribute['created_by']    = Auth::user()->id;
-            $productAttribute['updated_by']    = Auth::user()->id;
             ProductAttribute::create($productAttribute);
             $success['productAttribute'] = $productAttribute;
             return $this->sendResponse($success, 'Product Attribute successfully created.');
@@ -84,7 +83,6 @@ class ProductAttributeController extends Controller
     {
         try {
             $productAttribute = $request->all();
-            $productAttribute['created_by']    = Auth::user()->id;
             $productAttribute['updated_by']    = Auth::user()->id;
             ProductAttribute::where('id',$id)->update($productAttribute);
             $success['productAttribute'] = $productAttribute;

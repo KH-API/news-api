@@ -34,7 +34,6 @@ class NewsCategoryController extends Controller
         try {
             $category = $request->all();
             $category['created_by']    = Auth::user()->id;
-            $category['updated_by']    = Auth::user()->id;
             NewsCategory::create($category);
             $success['category'] = $category;
             return $this->sendResponse($success, 'Category successfully created.');
@@ -68,7 +67,6 @@ class NewsCategoryController extends Controller
     {
         try {
             $category = $request->all();
-            $category['created_by']    = Auth::user()->id;
             $category['updated_by']    = Auth::user()->id;
             NewsCategory::where('id',$id)->update($category);
             $success['category'] = $category;

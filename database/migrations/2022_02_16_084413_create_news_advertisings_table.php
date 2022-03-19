@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('news_advertisings', function (Blueprint $table) {
             $table->id();
-            $table->integer('category_id')->unsigned();;
+            $table->integer('category_id')->unsigned();
             $table->string('name', 100);
             $table->string('ads_image', 200);
             $table->string('ads_link', 200)->nullable();
@@ -24,8 +24,8 @@ return new class extends Migration
             $table->dateTime('end_date')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
         });
     }

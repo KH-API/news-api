@@ -51,7 +51,6 @@ class ProductController extends Controller
             $product = $request->all();
             $product['product_photo']   = $filename;
             $product['created_by']      = Auth::user()->id;
-            $product['updated_by']      = Auth::user()->id;
             Product::create($product);
             $success['product'] = $product;
             return $this->sendResponse($success, 'Product successfully created.');
@@ -104,7 +103,6 @@ class ProductController extends Controller
             }
             $product = $request->all();
             $product['product_photo']   = $filename;
-            $product['created_by']      = Auth::user()->id;
             $product['updated_by']      = Auth::user()->id;
             Product::where('id',$id)->update($product);
             $success['product'] = $product;

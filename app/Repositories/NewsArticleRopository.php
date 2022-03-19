@@ -70,7 +70,6 @@ class NewsArticleRopository
                 'seo_keyword'   => $request->seo_keyword,
                 'view_counter'  => $request->view_counter,
                 'created_by'    => Auth::user()->id,
-                'updated_by'    => Auth::user()->id,
             ]);
             DB::commit();
         } catch (\Exception $exp) {
@@ -95,7 +94,6 @@ class NewsArticleRopository
             $data = $request->all();
             $data['article_slug']   =  preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->title);
             $data['article_photo']  =  $filename;
-            $data['created_by']     =  Auth::user()->id;
             $data['updated_by']     =  Auth::user()->id;
             NewsArticle::where('id',$request->id)->update($data);
             DB::commit();

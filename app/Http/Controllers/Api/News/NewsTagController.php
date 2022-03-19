@@ -35,7 +35,6 @@ class NewsTagController extends Controller
         try {
             $tag = $request->all();
             $tag['created_by']    = Auth::user()->id;
-            $tag['updated_by']    = Auth::user()->id;
             NewsTag::create($tag);
             $success['tag'] = $tag;
             return $this->sendResponse($success, 'Tag successfully created.');
@@ -69,7 +68,6 @@ class NewsTagController extends Controller
     {
         try {
             $tag = $request->all();
-            $tag['created_by']    = Auth::user()->id;
             $tag['updated_by']    = Auth::user()->id;
             NewsTag::where('id',$id)->update($tag);
             $success['tag'] = $tag;

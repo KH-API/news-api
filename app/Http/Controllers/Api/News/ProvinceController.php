@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Api\News;
 
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Models\ProductStatus;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\CreateProductStatusRequest;
 
-class ProductStatusController extends Controller
+class ProvinceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,9 +17,9 @@ class ProductStatusController extends Controller
      */
     public function index()
     {
-        $productStatus = ProductStatus::paginate(10);
-        $success['productStatus'] = $productStatus;
-        return $this->sendResponse($success, 'Product Status retrive successfully.');
+        $province = Province::paginate(10);
+        $success['province'] = $province;
+        return $this->sendResponse($success, 'Province retrive successfully.');
     }
 
     /**
@@ -39,14 +38,15 @@ class ProductStatusController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateProductStatusRequest $request)
+    public function store(Request $request)
     {
         try {
-            $productStatus = $request->all();
-            $productStatus['created_by']    = Auth::user()->id;
-            ProductStatus::create($productStatus);
-            $success['productStatus'] = $productStatus;
-            return $this->sendResponse($success, 'Product Status successfully created.');
+            $province = Province::create([
+                'name'          => $request->name,
+                'created_by'    => Auth::user()->id,
+            ]);
+            $success['province']    = $province;
+            return $this->sendResponse($success, 'Province successfully created.');
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
@@ -61,9 +61,9 @@ class ProductStatusController extends Controller
      */
     public function show($id)
     {
-        $productStatus = ProductStatus::find($id);
-        $success['productStatus'] = $productStatus;
-        return $this->sendResponse($success, 'Product Status retrive successfully.');
+        $province = Province::find($id);
+        $success['province']    = $province;
+        return $this->sendResponse($success, 'Province retrive successfully.');
     }
 
     /**
@@ -84,14 +84,14 @@ class ProductStatusController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CreateProductStatusRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
-            $productStatus = $request->all();
-            $productStatus['updated_by']    = Auth::user()->id;
-            ProductStatus::where('id',$id)->update($productStatus);
-            $success['productStatus'] = $productStatus;
-            return $this->sendResponse($success, 'Product Status successfully updated.');
+            $province = $request->all();
+            $province['updated_by']    = Auth::user()->id;
+            Province::where('id',$id)->update($province);
+            $success['province']       = $province;
+            return $this->sendResponse($success, 'Province successfully updated.');
             DB::commit();
         } catch (\Throwable $exp) {
             DB::rollBack();
@@ -106,8 +106,8 @@ class ProductStatusController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = ProductStatus::where('id',$id)->delete($id);
+        $deleted = Province::find($id)->delete($id);
         $success['deleted'] = $deleted;
-        return $this->sendResponse($success, 'Product Status successfully deleted.');
+        return $this->sendResponse($success, 'Province successfully deleted.');
     }
 }
