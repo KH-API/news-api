@@ -44,7 +44,6 @@ class ProductCategoryController extends Controller
         try {
             $productCategory = $request->all();
             $productCategory['created_by']    = Auth::user()->id;
-            $productCategory['updated_by']    = Auth::user()->id;
             $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::create($productCategory);
             $success['productCategory'] = $productCategory;
@@ -90,7 +89,6 @@ class ProductCategoryController extends Controller
     {
         try {
             $productCategory = $request->all();
-            $productCategory['created_by']    = Auth::user()->id;
             $productCategory['updated_by']    = Auth::user()->id;
             $productCategory['slug']          = preg_replace("/[~`{}.'\"\!\@\#\$\%\^\&\*\(\)\_\=\+\/\?\>\<\,\[\]\:\;\|\\\]/","-", $request->name);
             ProductCategory::where('id',$id)->update($productCategory);

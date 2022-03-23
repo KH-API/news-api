@@ -39,7 +39,6 @@ class NewsAdvertisingController extends Controller
                 $image->move(public_path('uploads/advertising'), $filename);
             }
             $data['created_by']    = Auth::user()->id;
-            $data['updated_by']    = Auth::user()->id;
             # Move Image
             $data['ads_image'] = $filename;
             NewsAdvertising::create($data);
@@ -85,7 +84,6 @@ class NewsAdvertisingController extends Controller
             }
             # Move Image
             $data['ads_image']     = $filename;
-            $data['created_by']    = Auth::user()->id;
             $data['updated_by']    = Auth::user()->id;
             NewsAdvertising::where('id',$id)->update($data);
             $success['category'] = $data;

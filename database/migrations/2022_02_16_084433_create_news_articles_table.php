@@ -26,8 +26,8 @@ return new class extends Migration
             $table->integer('view_counter')->unsigned();
             $table->boolean('is_active')->deafult(true);
             $table->timestamps();
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
         });
     }

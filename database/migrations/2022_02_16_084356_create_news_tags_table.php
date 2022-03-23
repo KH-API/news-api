@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('description', 200)->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->integer('created_by')->unsigned();;
-            $table->integer('updated_by')->unsigned();;
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
         });
     }

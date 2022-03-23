@@ -23,8 +23,8 @@ return new class extends Migration
             $table->float('discount_price')->default(0);
             $table->text('content');
             $table->timestamps();
-            $table->integer('created_by')->unsigned();
-            $table->integer('updated_by')->unsigned();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();
         });
     }
