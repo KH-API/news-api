@@ -24,14 +24,15 @@ class AuthenticatedSessionController extends Controller
         return response()->noContent();
     }
 
-    public function login(LoginRequest $request){
+    public function user_login(LoginRequest $request){
         try{
             $credentials = $request->only('email', 'password');
             if (Auth::attempt($credentials)) {
                 if($request->device){
                     return Auth::user()->createToken($request->device)->plainTextToken;
                 }
-                return Auth::user();
+                // return Auth::user();
+                return response()->json(['status'=>true,'message'=>'Logined Successfull']);
             }else{
                 Auth::logout();
                return response()->json(['error'=>'Account not activate']);
@@ -39,6 +40,10 @@ class AuthenticatedSessionController extends Controller
         }catch(\Exception $e){
             return response()->json(['error'=>$e->getMessage()]);
         }
+    }
+    public function logout(){
+        Auth::logout();
+        return true;
     }
 
     /**
