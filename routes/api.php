@@ -14,9 +14,13 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('logins', [AuthenticatedSessionController::class, 'login']);
+Route::post('user-login', [AuthenticatedSessionController::class, 'user_login']);
 Route::post('login', [AuthenticatedSessionController::class, 'store'])->middleware('guest');
-Route::post('register',[RegisteredUserController::class,'store']);
+Route::post('logout',[AuthenticatedSessionController::class,'logout']);
+Route::post('register',[RegisteredUserController::class,'register']);
+Route::post('reset_password',[RegisteredUserController::class,'reset_password']);
+Route::post('forgot_password',[RegisteredUserController::class,'forgot_password']);
+Route::post('verifyToken',[RegisteredUserController::class,'verifyToken']);
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::apiResource('advertising', NewsAdvertisingController::class)->except(['create']);
     Route::apiResource('articles', NewsArticleController::class)->except(['create']);

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CreateProvinceRequest;
 
 class ProvinceController extends Controller
 {
@@ -38,7 +39,7 @@ class ProvinceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateProvinceRequest $request)
     {
         try {
             $province = Province::create([
@@ -84,7 +85,7 @@ class ProvinceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateProvinceRequest $request, $id)
     {
         try {
             $province = $request->all();
